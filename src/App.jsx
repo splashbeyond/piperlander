@@ -1,6 +1,19 @@
 import { useState } from 'react'
 import './App.css'
 
+const TOP_CRM_INTEGRATIONS = [
+  'Salesforce',
+  'HubSpot',
+  'Pipedrive',
+  'HighLevel',
+  'Zoho CRM',
+]
+
+const DEFAULT_FORMSPREE_FORM_ID = 'xnjlpwje'
+const formspreeFormId =
+  import.meta.env.VITE_FORMSPREE_FORM_ID || DEFAULT_FORMSPREE_FORM_ID
+const formspreeAction = `https://formspree.io/f/${formspreeFormId}`
+
 function App() {
   const automations = [
     {
@@ -96,9 +109,9 @@ function App() {
           <p className="eyebrow">Growth engine for appointment-based businesses</p>
           <h1>Recover lost revenue and grow faster on autopilot</h1>
           <p className="hero-copy">
-            Piper connects to your scheduling platform and runs six proven SMS workflows that
-            drive reviews, recover no-shows, reactivate dormant clients, and increase memberships.
-            Your team does nothing after setup.
+            Piper connects to your CRM and runs six proven SMS workflows that drive reviews,
+            recover no-shows, reactivate dormant clients, and increase memberships. Your team
+            does nothing after setup.
           </p>
           <div className="hero-actions">
             <button className="btn btn-primary">Get Piper</button>
@@ -180,25 +193,23 @@ function App() {
 
         <section id="integrations" className="section split">
           <div>
-            <p className="eyebrow">Universal architecture</p>
-            <h2>Plug into your existing scheduling stack</h2>
+            <p className="eyebrow">Works with your CRM</p>
+            <h2>One connection, your source of truth</h2>
             <p>
-              Piper&apos;s modular connector model means the automation core stays consistent
-              while integrations expand across med spas, salons, dental, wellness, and beyond.
+              Piper pulls from the contacts, deals, and activity already in your CRM so every
+              SMS is grounded in real pipeline and client history—not exports or spreadsheets.
+              Automations stay accurate as records update, and your team keeps working in the
+              tools they already trust.
             </p>
           </div>
           <div className="integration-card">
-            <p>Supported now</p>
+            <p>CRM</p>
             <ul>
-              <li>Vagaro</li>
-              <li>Acuity Scheduling</li>
-              <li>Square Appointments</li>
-              <li>Mindbody</li>
-              <li>Boulevard</li>
+              {TOP_CRM_INTEGRATIONS.map((name) => (
+                <li key={name}>{name}</li>
+              ))}
             </ul>
-            <p className="muted">
-              More connectors rolling out for dental, chiro, veterinary, and auto.
-            </p>
+            <p className="muted">And many more.</p>
           </div>
         </section>
 
@@ -246,20 +257,58 @@ function App() {
             <p className="eyebrow">Book your demo</p>
             <h2>See Piper customized for your business</h2>
             <p>Share your details and our team will reach out to schedule your live walkthrough.</p>
-            <form className="demo-form">
+            <form className="demo-form" action={formspreeAction} method="POST">
+              <input type="hidden" name="_subject" value="Piper: demo request" />
               <label htmlFor="name">Name</label>
-              <input id="name" name="name" type="text" required />
+              <input id="name" name="name" type="text" required autoComplete="name" />
 
               <label htmlFor="phone">Phone Number</label>
-              <input id="phone" name="phone" type="tel" required />
+              <input id="phone" name="phone" type="tel" required autoComplete="tel" />
 
               <label htmlFor="email">Email</label>
-              <input id="email" name="email" type="email" required />
+              <input id="email" name="email" type="email" required autoComplete="email" />
 
               <label htmlFor="business">Business Name</label>
-              <input id="business" name="business" type="text" required />
+              <input id="business" name="business" type="text" required autoComplete="organization" />
 
-              <button type="submit" className="btn btn-primary">Request Demo</button>
+              <fieldset className="demo-form-tools">
+                <legend>CRM / scheduling tool</legend>
+                <p className="demo-form-tools-hint">
+                  Optional—helps us prep your demo with the right context.
+                </p>
+                <label htmlFor="crm">Primary CRM</label>
+                <select id="crm" name="crm" defaultValue="">
+                  <option value="">Select if applicable</option>
+                  <option value="salesforce">Salesforce</option>
+                  <option value="hubspot">HubSpot</option>
+                  <option value="pipedrive">Pipedrive</option>
+                  <option value="highlevel">HighLevel</option>
+                  <option value="zoho">Zoho CRM</option>
+                  <option value="dynamics">Microsoft Dynamics 365</option>
+                  <option value="activecampaign">ActiveCampaign</option>
+                  <option value="other">Other</option>
+                  <option value="none">Not using a CRM yet</option>
+                </select>
+
+                <label htmlFor="scheduling_tool">Scheduling or booking tool</label>
+                <select id="scheduling_tool" name="scheduling_tool" defaultValue="">
+                  <option value="">Select if applicable</option>
+                  <option value="mindbody">Mindbody</option>
+                  <option value="vagaro">Vagaro</option>
+                  <option value="acuity">Acuity Scheduling</option>
+                  <option value="square">Square Appointments</option>
+                  <option value="boulevard">Boulevard</option>
+                  <option value="calendly">Calendly</option>
+                  <option value="jane">Jane</option>
+                  <option value="phorest">Phorest</option>
+                  <option value="other">Other</option>
+                  <option value="none">Not sure / none yet</option>
+                </select>
+              </fieldset>
+
+              <button type="submit" className="btn btn-primary">
+                Request Demo
+              </button>
             </form>
           </div>
         </section>

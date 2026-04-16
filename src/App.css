@@ -236,7 +236,7 @@
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 20px;
-  align-items: stretch;
+  align-items: start;
 }
 
 .integration-card {
@@ -331,6 +331,15 @@
   background: var(--brand-dark);
 }
 
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary:disabled:hover {
+  background: var(--brand-primary);
+}
+
 .btn-secondary {
   background: transparent;
   color: var(--brand-primary);
@@ -402,17 +411,47 @@
   color: var(--text-primary);
 }
 
-.demo-form input {
+.demo-form input,
+.demo-form select {
   min-height: 44px;
   border: 1px solid #dcd7d3;
   border-radius: 10px;
   padding: 10px 12px;
   font: inherit;
+  background: #fff;
 }
 
-.demo-form input:focus {
+.demo-form select {
+  cursor: pointer;
+}
+
+.demo-form input:focus,
+.demo-form select:focus {
   outline: 2px solid var(--brand-light);
   border-color: var(--brand-primary);
+}
+
+.demo-form-tools {
+  margin: 6px 0 0;
+  padding: 18px 0 0;
+  border: 0;
+  border-top: 1px solid #ede9e6;
+  display: grid;
+  gap: 10px;
+}
+
+.demo-form-tools legend {
+  font-weight: 700;
+  color: var(--text-primary);
+  padding: 0;
+  font-size: 15px;
+}
+
+.demo-form-tools-hint {
+  margin: -4px 0 2px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.45;
 }
 
 .demo-form button {
