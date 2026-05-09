@@ -225,7 +225,13 @@
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: auto; }
+  /* Native smooth anchor scroll (GPU-friendly); offset for sticky nav */
+  html {
+    scroll-padding-top: max(5rem, calc(env(safe-area-inset-top, 0px) + 4.25rem));
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
   body {
     margin: 0;
     font-family: var(--sans);
@@ -2517,54 +2523,6 @@
       });
     });
 
-    // Smooth in-page anchor scrolling with easing and sticky-nav offset.
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const easeInOutCubic = (t) => (t < 0.5)
-      ? 4 * t * t * t
-      : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-    const animatedScrollTo = (targetY, duration = 820) => {
-      if (prefersReducedMotion) {
-        window.scrollTo(0, targetY);
-        return;
-      }
-
-      const startY = window.scrollY || window.pageYOffset;
-      const delta = targetY - startY;
-      if (Math.abs(delta) < 2) return;
-
-      let startTime = null;
-      const step = (timestamp) => {
-        if (startTime === null) startTime = timestamp;
-        const elapsed = timestamp - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = easeInOutCubic(progress);
-        window.scrollTo(0, startY + (delta * eased));
-        if (progress < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    };
-
-    const nav = document.querySelector('.nav');
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener('click', (event) => {
-        const href = anchor.getAttribute('href');
-        if (!href || href === '#') return;
-
-        const target = document.querySelector(href);
-        if (!target) return;
-
-        event.preventDefault();
-        const navOffset = nav ? nav.offsetHeight + 12 : 0;
-        const targetY = Math.max(
-          0,
-          target.getBoundingClientRect().top + (window.scrollY || window.pageYOffset) - navOffset
-        );
-
-        animatedScrollTo(targetY);
-        window.history.pushState(null, '', href);
-      });
-    });
   });
 </script>
 
